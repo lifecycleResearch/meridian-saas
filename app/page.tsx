@@ -1,89 +1,76 @@
 // app/page.tsx
-// Meridian — single landing, full brand redesign matching the mockup.
+// Meridian Client Retention Service — single landing.
+// Hero: three-phone slide-module wireframe showing the real Meridian mobile app
+// Body: 6-pillar grid, 3 pricing tiers, lifestyle imagery, lead form
+// Constraint: no internal scroll inside widgets — everything fits in view
 
+import Link from "next/link";
 import { PRODUCT, formatPrice, type Tier } from "@/lib/catalog";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { LeadForm } from "@/components/LeadForm";
-import { TierIcon, PillarIcon, AddonIcon } from "@/components/Icons";
+import { TierIcon, PillarIcon, AddonIcon, PhoneFrame } from "@/components/Icons";
 
 export default function HomePage() {
   return (
     <div>
-      {/* Hero */}
-      <section className="relative bg-cream-100">
-        <div className="container grid md:grid-cols-2 gap-12 py-12 items-center">
-          <div>
-            <h1 className="font-serif text-7xl md:text-[110px] font-light leading-[0.95] tracking-tight text-ink-900 mb-2">
-              {PRODUCT.tagline.serif}
-            </h1>
-            <div className="h-script text-6xl md:text-7xl italic mb-8">
-              {PRODUCT.tagline.script}
+      {/* HERO with three-phone slide-module wireframe */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-navy-900 via-navy-950 to-brand-600 text-white">
+        <div className="absolute inset-0 grid-bg opacity-20" />
+        <div className="container relative py-20 md:py-24">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="eyebrow !text-brand-200 mb-3">Client Retention Service</div>
+              <h1 className="font-serif text-5xl md:text-7xl font-light leading-[0.95] tracking-tight text-cream-50 mb-2 text-balance">
+                {PRODUCT.tagline.serif}
+              </h1>
+              <div className="font-script text-5xl md:text-6xl italic text-gold-200 mb-6">
+                {PRODUCT.tagline.script}
+              </div>
+              <div className="ornament !my-4"><span className="diamond !bg-gold-200" /></div>
+              <p className="text-lg text-navy-200 max-w-md mb-8 leading-relaxed">
+                {PRODUCT.description}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a href="#pricing" className="btn-gold">See The Plans</a>
+                <Link href="/#story" className="btn-gold-outline bg-transparent !text-cream-50 border-cream-50/40 hover:bg-cream-50/10 hover:!text-cream-50">
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3"><path d="M8 5v14l11-7z" /></svg>
+                  Watch the Story
+                </Link>
+              </div>
             </div>
+            <div className="flex justify-center items-end gap-3">
+              <PhoneFrame variant="splash" className="w-[170px] h-[350px] hidden md:block opacity-70 translate-y-6" />
+              <PhoneFrame variant="browse" className="w-[200px] h-[400px] z-10" />
+              <PhoneFrame variant="detail" className="w-[170px] h-[350px] hidden md:block opacity-70 translate-y-6" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TIERS */}
+      <section id="pricing" className="section bg-cream-50">
+        <div className="container">
+          <div className="text-center mb-10">
+            <div className="eyebrow mb-2">The Plans</div>
             <div className="ornament"><span className="diamond" /></div>
-            <p className="text-lg text-ink-800 mt-6 leading-relaxed max-w-md">
-              {PRODUCT.tagline.body[0]}<br />
-              {PRODUCT.tagline.body[1]}
-              <span className="h-script text-3xl">{PRODUCT.tagline.emphasis}</span>
-              {PRODUCT.tagline.ending}
-            </p>
-            <div className="flex flex-wrap gap-3 mt-8">
-              <a href="#story" className="btn-gold">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3"><path d="M8 5v14l11-7z" /></svg>
-                Watch the Story
-              </a>
-              <a href="#how" className="btn-gold-outline">See How It Works</a>
-            </div>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink-900 mt-3 mb-2">Simple plans. Meaningful results.</h2>
           </div>
-          <div className="relative">
-            <div className="aspect-[4/5] rounded-card overflow-hidden shadow-card border border-ink-800/10">
-              <img src={PRODUCT.hero.image} alt={PRODUCT.hero.imageAlt} className="w-full h-full object-cover" />
-            </div>
-            {/* small brand mark in corner */}
-            <div className="absolute -bottom-3 -right-3 bg-ink-900 text-cream-50 px-4 py-3 rounded-card shadow-strong">
-              <div className="font-serif text-sm tracking-widest text-gold-200">MERIDIAN</div>
-            </div>
+          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {PRODUCT.tiers.map(tier => <PricingCard key={tier.id} tier={tier} />)}
           </div>
         </div>
       </section>
 
-      {/* Tagline + Plans intro */}
-      <section className="py-16 bg-cream-50 border-y border-ink-800/5">
-        <div className="container text-center">
-          <p className="font-serif text-2xl md:text-3xl text-ink-800 max-w-3xl mx-auto leading-snug">
-            The difference between a closed transaction<br />
-            and a lifelong advocate is what happens
-          </p>
-          <p className="h-script text-4xl md:text-5xl mt-3">
-            after the closing table.
-          </p>
-          <div className="ornament mt-6"><span className="diamond" /></div>
-        </div>
-      </section>
-
-      {/* Plans (pricing) */}
-      <section id="pricing" className="section">
+      {/* 6 PILLARS */}
+      <section className="section">
         <div className="container">
-          <div className="grid md:grid-cols-4 gap-8 items-start">
-            <div className="md:pt-16">
-              <div className="eyebrow mb-3">The Plans</div>
-              <div className="ornament !my-2 !justify-start"><span className="diamond" /></div>
-              <p className="font-serif text-xl text-ink-800 mt-4">Simple plans.<br/>Meaningful results.</p>
-            </div>
-            {PRODUCT.tiers.map(tier => (
-              <PricingCard key={tier.id} tier={tier} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6-pillar grid (Who/What/Why/How/Promise/Legacy) */}
-      <section id="how" className="section bg-cream-50 border-y border-ink-800/5">
-        <div className="container">
-          <div className="grid md:grid-cols-3 gap-x-12 gap-y-12">
+          <div className="grid md:grid-cols-3 gap-x-10 gap-y-10">
             {PRODUCT.pillars.map(p => (
-              <div key={p.title} className="text-center md:text-left">
-                <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
-                  <PillarIcon name={p.icon as any} className="w-5 h-5 text-gold-400" />
+              <div key={p.title} className="text-left">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-full border border-gold-400/40 flex items-center justify-center">
+                    <PillarIcon name={p.icon as any} className="w-4 h-4 text-gold-400" />
+                  </div>
                   <div className="eyebrow">{p.title}</div>
                 </div>
                 <p className="text-sm text-ink-800 leading-relaxed">{p.body}</p>
@@ -93,20 +80,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Add-ons strip */}
-      <section className="py-16 bg-cream-100">
+      {/* LIFESTYLE IMAGES */}
+      <section className="py-16 bg-cream-50">
         <div className="container">
-          <div className="grid md:grid-cols-6 gap-6 items-start">
-            <div className="md:col-span-1">
-              <div className="eyebrow mb-3">Add-ons</div>
-              <div className="ornament !my-2 !justify-start"><span className="diamond" /></div>
-            </div>
+          <div className="text-center mb-8">
+            <div className="eyebrow mb-2">Real Moments</div>
+            <div className="ornament"><span className="diamond" /></div>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+              <div key={i} className="aspect-square overflow-hidden rounded-card border border-ink-800/10 shadow-soft">
+                <img src={`/images/meridian-panel-${i}.jpg`} alt={`Meridian moment ${i}`} className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ADD-ONS */}
+      <section className="section">
+        <div className="container">
+          <div className="grid md:grid-cols-5 gap-6">
             {PRODUCT.addons.map(a => (
-              <div key={a.title} className="md:col-span-1 text-center">
+              <div key={a.title} className="text-center">
                 <div className="mx-auto mb-3 w-12 h-12 rounded-full border border-ink-800/30 flex items-center justify-center">
                   <AddonIcon name={a.icon as any} className="w-5 h-5 text-ink-800" />
                 </div>
-                <div className="font-serif text-sm font-semibold tracking-widest uppercase text-ink-800 mb-2">{a.title}</div>
+                <div className="eyebrow mb-2">{a.title}</div>
                 <p className="text-xs text-ink-500 leading-relaxed">{a.body}</p>
               </div>
             ))}
@@ -114,13 +114,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Promise banner */}
+      {/* PROMISE BANNER */}
       <section className="py-20 bg-ink-900 text-cream-50">
         <div className="container text-center">
           <div className="eyebrow !text-gold-200 mb-3">Our Promise</div>
-          <h2 className="font-serif text-4xl md:text-5xl tracking-widest mb-4">
-            {PRODUCT.brand.promise}
-          </h2>
+          <h2 className="font-serif text-4xl md:text-5xl tracking-widest mb-4">{PRODUCT.brand.promise}</h2>
           <div className="ornament"><span className="diamond !bg-gold-200" /></div>
           <p className="mt-6 text-cream-200/80 max-w-2xl mx-auto">
             One moment at a time, until you are the only agent they will ever call.
@@ -128,7 +126,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Contact / lead form */}
+      {/* CONTACT / LEAD FORM */}
       <section id="story" className="section">
         <div className="container max-w-2xl text-center">
           <div className="eyebrow mb-3">Get In Touch</div>
@@ -146,14 +144,11 @@ export default function HomePage() {
 
 function PricingCard({ tier }: { tier: Tier }) {
   const isPopular = !!tier.highlight;
-  const CardTag = isPopular ? 'div' : 'div';
-  const cardClass = isPopular
-    ? 'card-gold p-6 flex flex-col relative'
-    : 'card p-6 flex flex-col';
+  const cardClass = isPopular ? 'card-gold p-6 flex flex-col relative' : 'card p-6 flex flex-col';
   return (
     <div id={tier.id} className={cardClass}>
       {isPopular ? (
-        <div className="absolute -top-3 left-1/5 -translate-x-1/5 bg-gold-400 text-white text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-pill">
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold-400 text-white text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-pill">
           {tier.popularLabel || 'Most Popular'}
         </div>
       ) : null}
@@ -175,9 +170,7 @@ function PricingCard({ tier }: { tier: Tier }) {
           <div className="text-[10px] tracking-widest uppercase text-ink-500 mt-1">One-time fee</div>
         ) : null}
       </div>
-      <p className="text-xs text-ink-500 leading-relaxed text-center mb-6">
-        {tier.description}
-      </p>
+      <p className="text-xs text-ink-500 leading-relaxed text-center mb-6">{tier.description}</p>
       <div className="mt-auto">
         <CheckoutButton product="meridian" tier={tier.id} label={tier.cta} popular={isPopular} />
       </div>

@@ -3,11 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --color-bg: 244 237 224;     /* cream */
-    --color-ink: 28 28 28;
-    --color-gold: 160 129 68;
-  }
   html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   body {
     @apply bg-cream-100 text-ink-800 font-sans;
@@ -17,7 +12,6 @@
 }
 
 @layer components {
-  /* Buttons matching the WATCH THE STORY gold-bordered style */
   .btn-gold {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3
            bg-gold-400 text-white font-semibold text-xs tracking-widest uppercase
@@ -35,18 +29,14 @@
            text-ink-800 font-semibold text-xs tracking-widest uppercase
            rounded-pill hover:bg-ink-800/5 active:scale-95 transition;
   }
-
-  /* Card style: cream surface with hairline border */
   .card {
-    @apply bg-cream-50 rounded-card border border-ink-800/5
+    @apply bg-cream-50 rounded-card border border-ink-800/10
            shadow-soft overflow-hidden;
   }
   .card-gold {
     @apply bg-cream-50 rounded-card border-2 border-gold-400
            shadow-gold overflow-hidden;
   }
-
-  /* Eyebrow label: gold uppercase tracking */
   .eyebrow {
     @apply text-gold-400 text-xs font-semibold tracking-widest uppercase;
   }
@@ -61,17 +51,21 @@
   .diamond {
     @apply w-2 h-2 bg-gold-400 rotate-45;
   }
-
   .container { @apply max-w-6xl mx-auto px-6; }
   .section { @apply py-20; }
-  .h-display {
-    @apply font-serif font-light tracking-tight text-ink-900;
-  }
-  .h-script {
-    @apply font-script text-gold-400;
-  }
+  .h-display { @apply font-serif font-light tracking-tight text-ink-900; }
+  .h-script { @apply font-script text-gold-400; }
 }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
+  .phone-frame {
+    @apply relative bg-ink-900 rounded-[44px] p-2 shadow-phone;
+  }
+  .phone-screen {
+    @apply relative w-full h-full bg-cream-50 rounded-[36px] overflow-hidden;
+  }
+  .phone-notch {
+    @apply absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-ink-900 rounded-b-2xl z-10;
+  }
 }

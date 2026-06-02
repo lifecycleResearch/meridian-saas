@@ -5,7 +5,7 @@ import Link from "next/link";
 import { PRODUCT } from "@/lib/catalog";
 
 export const metadata: Metadata = {
-  title: "Meridian — Presence Without Pressure",
+  title: "Meridian — Client Retention Service",
   description: "The only full-service client retention company built for the premier real estate agent. Cards, gifts, and curated touchpoints delivered for years.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
 };
@@ -22,13 +22,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <header className="border-b border-ink-800/5 bg-cream-100">
+        <header className="border-b border-ink-800/10 bg-cream-100/95 backdrop-blur sticky top-0 z-50">
           <div className="container flex items-center justify-between h-24">
             <Link href="/" className="flex flex-col items-center">
               <div className="relative w-12 h-12 mb-1 flex items-center justify-center border border-ink-800 rounded-full">
                 <span className="font-serif text-2xl text-ink-800">M</span>
-                <span className="absolute -top-1 left-1/5 -translate-x-1/5 w-px h-1 bg-ink-800" />
-                <span className="absolute -bottom-1 left-1/5 -translate-x-1/5 w-px h-1 bg-ink-800" />
               </div>
               <span className="font-serif text-base tracking-[0.32em] text-ink-800">MERIDIAN</span>
               <span className="text-[9px] tracking-[0.28em] text-ink-500 uppercase">Client Retention Service</span>
@@ -38,17 +36,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Log in
               </Link>
               <span className="w-px h-4 bg-ink-800/30" />
-              <a href="#story" className="btn-gold">
+              <Link href="/#story" className="btn-gold">
                 <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3"><path d="M8 5v14l11-7z" /></svg>
                 Watch the Story
-              </a>
+              </Link>
             </div>
           </div>
         </header>
 
         <main>{children}</main>
 
-        <footer className="bg-cream-50 border-t border-ink-800/5 mt-0">
+        <footer className="bg-cream-50 border-t border-ink-800/10 mt-0">
           <div className="container py-16 text-center">
             <div className="eyebrow mb-3">{PRODUCT.brand.promise}</div>
             <h3 className="font-serif text-2xl tracking-widest text-ink-800 mb-4">

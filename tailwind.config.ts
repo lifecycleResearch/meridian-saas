@@ -10,16 +10,16 @@ export default {
         serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
       },
       colors: {
-        // Brand palette derived from the Meridian mockup
+        // Meridian brand palette — warm cream + gold + ink
         cream: {
-          DEFAULT: '#f4ede0',     // page background
+          DEFAULT: '#f4ede0',
           50: '#fbf7ee',
           100: '#f4ede0',
           200: '#e8dec7',
           300: '#d8c9a3',
         },
         gold: {
-          DEFAULT: '#a08144',     // primary brand gold
+          DEFAULT: '#a08144',
           50: '#f6efde',
           100: '#e9d9b3',
           200: '#d4b97a',
@@ -30,7 +30,7 @@ export default {
           700: '#4f3c1c',
         },
         ink: {
-          DEFAULT: '#1c1c1c',     // primary text
+          DEFAULT: '#1c1c1c',
           900: '#0d0d0d',
           800: '#1c1c1c',
           700: '#2d2d2d',
@@ -43,6 +43,7 @@ export default {
         card: '0 1px 2px rgba(28, 28, 28, 0.04), 0 8px 24px rgba(28, 28, 28, 0.06)',
         gold: '0 0 0 1px #a08144, 0 8px 24px rgba(160, 129, 68, 0.15)',
         soft: '0 1px 2px rgba(28, 28, 28, 0.04)',
+        phone: '0 30px 80px rgba(28, 28, 28, 0.35)',
       },
       letterSpacing: {
         wider: '0.18em',
