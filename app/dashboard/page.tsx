@@ -3,7 +3,7 @@
 
 import { redirect } from "next/navigation";
 import { createServerSupabase } from "@/lib/supabase-server";
-import { CATALOG } from "@/lib/catalog";
+import { PRODUCT } from "@/lib/catalog";
 import Link from "next/link";
 
 export default async function DashboardPage() {

@@ -4,44 +4,74 @@
 
 @layer base {
   :root {
-    --color-bg: 15 23 41;
-    --color-fg: 26 34 51;
-    --color-muted: 122 133 153;
+    --color-bg: 244 237 224;     /* cream */
+    --color-ink: 28 28 28;
+    --color-gold: 160 129 68;
   }
   html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-  body { @apply bg-navy-50 text-navy-900 font-sans; }
-  ::selection { @apply bg-brand-500 text-white; }
+  body {
+    @apply bg-cream-100 text-ink-800 font-sans;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'><defs><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' /></filter></defs><rect width='200' height='200' filter='url(%23n)' opacity='0.04'/></svg>");
+  }
+  ::selection { @apply bg-gold-400 text-white; }
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-navy-900 text-white font-semibold rounded-pill hover:bg-navy-700 active:scale-95 transition;
+  /* Buttons matching the WATCH THE STORY gold-bordered style */
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-gold-400 text-white font-semibold text-xs tracking-widest uppercase
+           rounded-pill hover:bg-gold-500 active:scale-95 transition
+           shadow-soft;
   }
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-navy-900 font-semibold rounded-pill border border-navy-200 hover:border-navy-300 active:scale-95 transition;
+  .btn-gold-outline {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3
+           bg-transparent text-ink-800 font-semibold text-xs tracking-widest uppercase
+           rounded-pill border border-ink-800 hover:bg-ink-800 hover:text-cream-50
+           active:scale-95 transition;
   }
   .btn-ghost {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-navy-900 font-semibold rounded-pill hover:bg-navy-100 active:scale-95 transition;
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2
+           text-ink-800 font-semibold text-xs tracking-widest uppercase
+           rounded-pill hover:bg-ink-800/5 active:scale-95 transition;
   }
+
+  /* Card style: cream surface with hairline border */
   .card {
-    @apply bg-white rounded-card shadow-card overflow-hidden;
+    @apply bg-cream-50 rounded-card border border-ink-800/5
+           shadow-soft overflow-hidden;
   }
-  .container {
-    @apply max-w-6xl mx-auto px-6;
+  .card-gold {
+    @apply bg-cream-50 rounded-card border-2 border-gold-400
+           shadow-gold overflow-hidden;
   }
-  .section {
-    @apply py-20;
+
+  /* Eyebrow label: gold uppercase tracking */
+  .eyebrow {
+    @apply text-gold-400 text-xs font-semibold tracking-widest uppercase;
   }
+  .ornament {
+    @apply inline-flex items-center justify-center gap-3 my-4;
+  }
+  .ornament::before,
+  .ornament::after {
+    content: '';
+    @apply h-px w-12 bg-gold-400/40;
+  }
+  .diamond {
+    @apply w-2 h-2 bg-gold-400 rotate-45;
+  }
+
+  .container { @apply max-w-6xl mx-auto px-6; }
+  .section { @apply py-20; }
   .h-display {
-    @apply font-display italic font-medium tracking-tight;
+    @apply font-serif font-light tracking-tight text-ink-900;
+  }
+  .h-script {
+    @apply font-script text-gold-400;
   }
 }
 
 @layer utilities {
   .text-balance { text-wrap: balance; }
-  .grid-bg {
-    background-image: linear-gradient(rgba(30,111,184,.06) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(30,111,184,.06) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
 }

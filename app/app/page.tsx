@@ -1,16 +1,16 @@
 // app/app/page.tsx
 // Meridian mobile PWA — slide-module design.
 
-import { CATALOG, formatPrice } from "@/lib/catalog";
+import { PRODUCT, formatPrice } from "@/lib/catalog";
 import { MeridianPwa } from "./MeridianPwa";
 
 export const dynamic = "force-static";
 
 export default function PwaPage() {
-  const product = CATALOG[0]; // Meridian
+  const product = PRODUCT; // Meridian
 
   // Tier → "moment" card. Use the tier id as a stable photo key.
-  const moments = product.tiers.map(t => ({
+  const moments = PRODUCT.tiers.map(t => ({
     id: t.id,
     name: t.name,
     price: formatPrice(t.price, t.interval),
@@ -19,5 +19,5 @@ export default function PwaPage() {
     tagline: t.features[0] || t.description,
   }));
 
-  return <MeridianPwa moments={moments} productName={product.name} tagline={product.tagline} />;
+  return <MeridianPwa moments={moments} productName={product.name} tagline={`${product.tagline.serif} ${product.tagline.script}`} />;
 }

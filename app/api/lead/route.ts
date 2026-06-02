@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { findProduct, findTier } from "@/lib/catalog";
+import { findTier, PRODUCT } from "@/lib/catalog";
 import { createAdminSupabase } from "@/lib/supabase-server";
 import { resend, leadNotifyEmail } from "@/lib/resend";
 import { randomUUID } from "node:crypto";
@@ -30,10 +30,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.errors[0]?.message || "Invalid input" }, { status: 400 });
   }
   const lead = parsed.data;
-  const product = findProduct("meridian");
-  const tier = findTier(lead.tier);
-  if (!product || !tier) {
-    return NextResponse.json({ error: "Unknown product or tier" }, { status: 404 });
+
+  if (lead.product !== PRODUCT.id) {
+    return NextResponse.json({ error: "Unknown product" }, { status: 404 });
+  }
+  // For tier="lead" (contact form), skip the tier lookup
+  let tierName: string | null = null;
+  if (lead.tier !== "lead") {
+    const tier = findTier(lead.tier);
+    if (!tier) return NextResponse.json({ error: "Unknown tier" }, { status: 404 });
+    tierName = tier.name;
   }
 
   const id = randomUUID();
@@ -48,8 +54,8 @@ export async function POST(req: NextRequest) {
     notes: lead.notes || null,
     product: lead.product,
     tier: lead.tier,
-    product_name: product.name,
-    tier_name: tier.name,
+    product_name: PRODUCT.name,
+    tier_name: tierName,
     source: lead.source || "meridian-saas",
     user_agent: req.headers.get("user-agent") || null,
     ip: req.headers.get("x-forwarded-for")?.split(",")[0] || null,
@@ -66,20 +72,18 @@ export async function POST(req: NextRequest) {
       storage = "supabase";
     }
   } else {
-    // No admin key — log to stdout as a fallback. In production with no DB,
-    // the lead is still recorded in app logs.
     console.log("[lead]", JSON.stringify(row));
   }
 
-  // Notify via Resend (fire-and-forget, never block lead capture)
   if (resend) {
     resend.emails.send({
       from: "Meridian Leads <leads@clientretentionservice.com>",
       to: [leadNotifyEmail],
-      subject: `New lead: ${product.name} ${tier.name}`,
-      html: `<h2>New lead</h2>
+      subject: `New Meridian lead: ${lead.name || lead.email || lead.phone || "Unknown"}`,
+      html: `<h2>New Meridian lead</h2>
         <ul>
-          <li><b>Product</b>: ${product.name} (${tier.name})</li>
+          <li><b>Product</b>: ${PRODUCT.name}</li>
+          ${tierName ? `<li><b>Tier</b>: ${tierName}</li>` : ""}
           <li><b>Name</b>: ${lead.name || "—"}</li>
           <li><b>Email</b>: ${lead.email || "—"}</li>
           <li><b>Phone</b>: ${lead.phone || "—"}</li>

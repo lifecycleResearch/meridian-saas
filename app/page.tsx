@@ -1,118 +1,186 @@
 // app/page.tsx
-// Meridian — single product landing.
+// Meridian — single landing, full brand redesign matching the mockup.
 
-import { CATALOG, formatPrice } from "@/lib/catalog";
+import { PRODUCT, formatPrice, type Tier } from "@/lib/catalog";
 import { CheckoutButton } from "@/components/CheckoutButton";
 import { LeadForm } from "@/components/LeadForm";
-
-const product = CATALOG[0];
+import { TierIcon, PillarIcon, AddonIcon } from "@/components/Icons";
 
 export default function HomePage() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-navy-950 via-navy-900 to-brand-600 text-white">
-        <div className="absolute inset-0 grid-bg opacity-20" />
-        <div className="container relative py-24 md:py-32">
-          <div className="max-w-3xl">
-            <div className="inline-block px-3 py-1 bg-white/10 backdrop-blur border border-white/20 rounded-pill text-xs font-semibold mb-6">
-              {product.tiers.length} tiers · 12-month program
-            </div>
-            <h1 className="h-display text-5xl md:text-7xl mb-6 text-balance">
-              {product.tagline}
+      <section className="relative bg-cream-100">
+        <div className="container grid md:grid-cols-2 gap-12 py-12 items-center">
+          <div>
+            <h1 className="font-serif text-7xl md:text-[110px] font-light leading-[0.95] tracking-tight text-ink-900 mb-2">
+              {PRODUCT.tagline.serif}
             </h1>
-            <p className="text-lg md:text-xl text-navy-200 max-w-2xl mb-10 text-balance">
-              {product.description}
+            <div className="h-script text-6xl md:text-7xl italic mb-8">
+              {PRODUCT.tagline.script}
+            </div>
+            <div className="ornament"><span className="diamond" /></div>
+            <p className="text-lg text-ink-800 mt-6 leading-relaxed max-w-md">
+              {PRODUCT.tagline.body[0]}<br />
+              {PRODUCT.tagline.body[1]}
+              <span className="h-script text-3xl">{PRODUCT.tagline.emphasis}</span>
+              {PRODUCT.tagline.ending}
             </p>
-            <div className="flex flex-wrap gap-4">
-              <a href="#pricing" className="btn-primary bg-white text-navy-900 hover:bg-navy-100">
-                See pricing
+            <div className="flex flex-wrap gap-3 mt-8">
+              <a href="#story" className="btn-gold">
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3 h-3"><path d="M8 5v14l11-7z" /></svg>
+                Watch the Story
               </a>
-              <a href="#contact" className="btn-secondary bg-transparent text-white border-white/30 hover:bg-white/10">
-                Talk to us
-              </a>
+              <a href="#how" className="btn-gold-outline">See How It Works</a>
+            </div>
+          </div>
+          <div className="relative">
+            <div className="aspect-[4/5] rounded-card overflow-hidden shadow-card border border-ink-800/10">
+              <img src={PRODUCT.hero.image} alt={PRODUCT.hero.imageAlt} className="w-full h-full object-cover" />
+            </div>
+            {/* small brand mark in corner */}
+            <div className="absolute -bottom-3 -right-3 bg-ink-900 text-cream-50 px-4 py-3 rounded-card shadow-strong">
+              <div className="font-serif text-sm tracking-widest text-gold-200">MERIDIAN</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how-it-works" className="section">
+      {/* Tagline + Plans intro */}
+      <section className="py-16 bg-cream-50 border-y border-ink-800/5">
+        <div className="container text-center">
+          <p className="font-serif text-2xl md:text-3xl text-ink-800 max-w-3xl mx-auto leading-snug">
+            The difference between a closed transaction<br />
+            and a lifelong advocate is what happens
+          </p>
+          <p className="h-script text-4xl md:text-5xl mt-3">
+            after the closing table.
+          </p>
+          <div className="ornament mt-6"><span className="diamond" /></div>
+        </div>
+      </section>
+
+      {/* Plans (pricing) */}
+      <section id="pricing" className="section">
         <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-navy-900 mb-3">How Meridian works</h2>
-            <p className="text-navy-500 max-w-2xl mx-auto">Twelve months. Forty-eight touchpoints. Zero effort after setup.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { step: "01", title: "Set up your sphere", desc: "Import your past clients. We handle the birthdays, anniversaries, and closing-day reminders." },
-              { step: "02", title: "We send for you", desc: "Personalized cards, curated gifts, follow-up emails — all timed to the moment that matters." },
-              { step: "03", title: "You stay top-of-mind", desc: "When a past client thinks real estate, they think you. Referrals come back to the only agent they remember." },
-            ].map(s => (
-              <div key={s.step} className="card p-6">
-                <div className="text-3xl font-display italic text-brand-600 mb-3">{s.step}</div>
-                <h3 className="text-xl font-bold text-navy-900 mb-2">{s.title}</h3>
-                <p className="text-sm text-navy-500 leading-relaxed">{s.desc}</p>
-              </div>
+          <div className="grid md:grid-cols-4 gap-8 items-start">
+            <div className="md:pt-16">
+              <div className="eyebrow mb-3">The Plans</div>
+              <div className="ornament !my-2 !justify-start"><span className="diamond" /></div>
+              <p className="font-serif text-xl text-ink-800 mt-4">Simple plans.<br/>Meaningful results.</p>
+            </div>
+            {PRODUCT.tiers.map(tier => (
+              <PricingCard key={tier.id} tier={tier} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Pricing */}
-      <section id="pricing" className="section bg-navy-50">
+      {/* 6-pillar grid (Who/What/Why/How/Promise/Legacy) */}
+      <section id="how" className="section bg-cream-50 border-y border-ink-800/5">
         <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-navy-900 mb-3">Pick your tier</h2>
-            <p className="text-navy-500">All tiers include a 14-day free trial. Cancel anytime.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {product.tiers.map(tier => (
-              <div
-                key={tier.id}
-                id={tier.id}
-                className={`card p-6 flex flex-col bg-white ${tier.highlight ? "ring-2 ring-navy-900 relative" : ""}`}
-              >
-                {tier.highlight ? (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-navy-900 text-white text-xs font-bold px-3 py-1 rounded-pill">Most popular</div>
-                ) : null}
-                <h3 className="text-xl font-bold text-navy-900 mb-1">{tier.name}</h3>
-                <p className="text-sm text-navy-500 mb-4">{tier.description}</p>
-                <div className="mb-6">
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-navy-900">{formatPrice(tier.price, tier.interval)}</span>
-                  </div>
-                  {tier.interval !== "one-time" && tier.price > 0 ? (
-                    <div className="text-xs text-navy-500">per {tier.interval}, billed {tier.interval}ly</div>
-                  ) : null}
+          <div className="grid md:grid-cols-3 gap-x-12 gap-y-12">
+            {PRODUCT.pillars.map(p => (
+              <div key={p.title} className="text-center md:text-left">
+                <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
+                  <PillarIcon name={p.icon as any} className="w-5 h-5 text-gold-400" />
+                  <div className="eyebrow">{p.title}</div>
                 </div>
-                <ul className="space-y-2 mb-6 flex-1">
-                  {tier.features.map(f => (
-                    <li key={f} className="text-sm text-navy-700 flex gap-2">
-                      <span className="text-brand-600 font-bold">✓</span>
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <CheckoutButton product="meridian" tier={tier.id} label={tier.cta} />
+                <p className="text-sm text-ink-800 leading-relaxed">{p.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Lead form */}
-      <section id="contact" className="section">
-        <div className="container max-w-2xl">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-navy-900 mb-2">Not ready yet?</h2>
-            <p className="text-navy-500">Drop your info. We'll reach out within 24 hours.</p>
+      {/* Add-ons strip */}
+      <section className="py-16 bg-cream-100">
+        <div className="container">
+          <div className="grid md:grid-cols-6 gap-6 items-start">
+            <div className="md:col-span-1">
+              <div className="eyebrow mb-3">Add-ons</div>
+              <div className="ornament !my-2 !justify-start"><span className="diamond" /></div>
+            </div>
+            {PRODUCT.addons.map(a => (
+              <div key={a.title} className="md:col-span-1 text-center">
+                <div className="mx-auto mb-3 w-12 h-12 rounded-full border border-ink-800/30 flex items-center justify-center">
+                  <AddonIcon name={a.icon as any} className="w-5 h-5 text-ink-800" />
+                </div>
+                <div className="font-serif text-sm font-semibold tracking-widest uppercase text-ink-800 mb-2">{a.title}</div>
+                <p className="text-xs text-ink-500 leading-relaxed">{a.body}</p>
+              </div>
+            ))}
           </div>
-          <div className="card p-8">
+        </div>
+      </section>
+
+      {/* Promise banner */}
+      <section className="py-20 bg-ink-900 text-cream-50">
+        <div className="container text-center">
+          <div className="eyebrow !text-gold-200 mb-3">Our Promise</div>
+          <h2 className="font-serif text-4xl md:text-5xl tracking-widest mb-4">
+            {PRODUCT.brand.promise}
+          </h2>
+          <div className="ornament"><span className="diamond !bg-gold-200" /></div>
+          <p className="mt-6 text-cream-200/80 max-w-2xl mx-auto">
+            One moment at a time, until you are the only agent they will ever call.
+          </p>
+        </div>
+      </section>
+
+      {/* Contact / lead form */}
+      <section id="story" className="section">
+        <div className="container max-w-2xl text-center">
+          <div className="eyebrow mb-3">Get In Touch</div>
+          <div className="ornament"><span className="diamond" /></div>
+          <h2 className="font-serif text-4xl text-ink-900 mt-4 mb-3">Ready when you are.</h2>
+          <p className="text-ink-500 mb-8">Tell us a bit about your business. We&apos;ll reach out within 24 hours.</p>
+          <div className="card p-8 text-left">
             <LeadForm product="meridian" />
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+function PricingCard({ tier }: { tier: Tier }) {
+  const isPopular = !!tier.highlight;
+  const CardTag = isPopular ? 'div' : 'div';
+  const cardClass = isPopular
+    ? 'card-gold p-6 flex flex-col relative'
+    : 'card p-6 flex flex-col';
+  return (
+    <div id={tier.id} className={cardClass}>
+      {isPopular ? (
+        <div className="absolute -top-3 left-1/5 -translate-x-1/5 bg-gold-400 text-white text-[10px] font-bold tracking-widest uppercase px-4 py-1 rounded-pill">
+          {tier.popularLabel || 'Most Popular'}
+        </div>
+      ) : null}
+      <div className="flex flex-col items-center text-center mb-4">
+        <div className="w-12 h-12 rounded-full border border-ink-800/30 flex items-center justify-center mb-3">
+          <TierIcon name={tier.icon} className="w-5 h-5 text-ink-800" />
+        </div>
+        <div className="font-serif text-base font-semibold tracking-widest uppercase text-ink-800">{tier.name}</div>
+        <div className="text-[10px] tracking-widest uppercase text-ink-500 mt-1">{tier.subtitle}</div>
+      </div>
+      <div className="text-center mb-4">
+        <div className="font-serif text-4xl font-light text-ink-900">
+          {formatPrice(tier.price, tier.interval)}
+          <span className="text-base text-ink-500 font-serif italic">
+            {tier.interval === 'one-time' ? ' / client' : ' / month'}
+          </span>
+        </div>
+        {tier.interval === 'one-time' ? (
+          <div className="text-[10px] tracking-widest uppercase text-ink-500 mt-1">One-time fee</div>
+        ) : null}
+      </div>
+      <p className="text-xs text-ink-500 leading-relaxed text-center mb-6">
+        {tier.description}
+      </p>
+      <div className="mt-auto">
+        <CheckoutButton product="meridian" tier={tier.id} label={tier.cta} popular={isPopular} />
+      </div>
     </div>
   );
 }

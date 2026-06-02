@@ -5,7 +5,7 @@
 // Run: npx tsx scripts/stripe-sync.ts
 // or:  npm run stripe:sync
 
-import { CATALOG, type Tier, type Product } from "../lib/catalog";
+import { PRODUCT, type Tier } from "../lib/catalog";
 import Stripe from "stripe";
 
 const key = process.env.STRIPE_SECRET_KEY;
@@ -16,7 +16,7 @@ if (!key) {
 
 const stripe = new Stripe(key, { apiVersion: "2024-11-20.acacia" as any });
 
-async function getOrCreateProduct(product: Product): Promise<Stripe.Product> {
+async function getOrCreateProduct(product: typeof PRODUCT): Promise<Stripe.Product> {
   const existing = await stripe.products.search({
     query: `metadata["catalog_id"]:"${product.id}"`,
   });
@@ -27,7 +27,7 @@ async function getOrCreateProduct(product: Product): Promise<Stripe.Product> {
   const created = await stripe.products.create({
     name: product.name,
     description: product.description,
-    metadata: { catalog_id: product.id, tagline: product.tagline, route: product.route },
+    metadata: { catalog_id: product.id, tagline: product.brand.promise, route: product.route },
   });
   console.log(`  [create] ${product.id} -> ${created.id}`);
   return created;
@@ -61,14 +61,10 @@ async function getOrCreatePrice(product: Stripe.Product, tier: Tier): Promise<St
 }
 
 async function main() {
-  console.log(`[stripe-sync] pushing ${CATALOG.length} product lines to Stripe`);
-  for (const product of CATALOG) {
-    console.log(`
-[${product.name}] ${product.tagline}`);
-    const p = await getOrCreateProduct(product);
-    for (const tier of product.tiers) {
-      await getOrCreatePrice(p, tier);
-    }
+  console.log(`[stripe-sync] pushing ${PRODUCT.name} to Stripe`);
+  const p = await getOrCreateProduct(PRODUCT);
+  for (const tier of PRODUCT.tiers) {
+    await getOrCreatePrice(p, tier);
   }
   console.log("\n[stripe-sync] done.");
 }

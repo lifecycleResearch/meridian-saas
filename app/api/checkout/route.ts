@@ -2,7 +2,7 @@
 // Create a Stripe Checkout session for a given catalog tier.
 
 import { NextRequest, NextResponse } from "next/server";
-import { findTier, findProduct } from "@/lib/catalog";
+import { findTier, PRODUCT } from "@/lib/catalog";
 import { stripe } from "@/lib/stripe";
 
 export const dynamic = "force-dynamic";
@@ -24,10 +24,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  const product = findProduct("meridian");
+  if (productId !== PRODUCT.id) {
+    return NextResponse.json({ error: "Unknown product" }, { status: 404 });
+  }
   const tier = findTier(tierId);
-  if (!product || !tier) {
-    return NextResponse.json({ error: "Unknown product or tier" }, { status: 404 });
+  if (!tier) {
+    return NextResponse.json({ error: "Unknown tier" }, { status: 404 });
   }
 
   // Free tier = no checkout, just signup
@@ -57,8 +59,8 @@ export async function POST(req: NextRequest) {
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: email,
-      success_url: `${siteUrl}/${product.route}?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/${product.route}?checkout=cancel`,
+      success_url: `${siteUrl}/${PRODUCT.route}?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}/${PRODUCT.route}?checkout=cancel`,
       metadata: {
         catalog_product: productId,
         catalog_tier: tierId,

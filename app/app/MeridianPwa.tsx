@@ -71,7 +71,7 @@ export function MeridianPwa({ moments, productName, tagline }: { moments: Moment
                 >
                   <div className="relative w-32 h-32 flex-shrink-0">
                     <img src={PHOTOS[m.id] || FALLBACK} alt={m.name} className="w-full h-full object-cover" />
-                    <div className="absolute top-2 left-2 bg-white/95 px-2 py-0.5 rounded-pill text-[10px] font-bold text-navy-900">
+                    <div className="absolute top-2 left-2 bg-white/90 px-2 py-0.5 rounded-pill text-[10px] font-bold text-navy-900">
                       {m.price}
                     </div>
                   </div>
@@ -92,7 +92,7 @@ export function MeridianPwa({ moments, productName, tagline }: { moments: Moment
             </div>
 
             {/* Tab bar */}
-            <div className="mt-auto border-t border-navy-100 bg-white/95 backdrop-blur flex justify-around pt-3 pb-6">
+            <div className="mt-auto border-t border-navy-100 bg-white/90 backdrop-blur flex justify-around pt-3 pb-6">
               {["Home", "Clients", "Sends", "Profile"].map(t => (
                 <button
                   key={t}
@@ -114,13 +114,13 @@ export function MeridianPwa({ moments, productName, tagline }: { moments: Moment
               <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent" />
               <button
                 onClick={() => setScreen("home")}
-                className="absolute top-14 left-5 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center"
+                className="absolute top-14 left-5 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center"
               >
                 ←
               </button>
               <button
                 onClick={() => setBookmarked(b => !b)}
-                className="absolute top-14 right-5 w-10 h-10 bg-white/95 rounded-full flex items-center justify-center"
+                className="absolute top-14 right-5 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center"
               >
                 <svg viewBox="0 0 24 24" fill={bookmarked ? "#ff4d6d" : "none"} stroke="currentColor" strokeWidth="2" className="w-5 h-5">
                   <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
