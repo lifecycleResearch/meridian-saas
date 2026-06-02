@@ -13,7 +13,7 @@ import { TierIcon, PillarIcon, AddonIcon, PhoneFrame } from "@/components/Icons"
 export default function HomePage() {
   return (
     <div>
-      {/* HERO with three-phone slide-module wireframe */}
+      {/* HERO with three-phone slide-module wireframe — navy gradient like the original travel app reference */}
       <section className="relative overflow-hidden bg-gradient-to-br from-navy-900 via-navy-950 to-brand-600 text-white">
         <div className="absolute inset-0 grid-bg opacity-20" />
         <div className="container relative py-20 md:py-24">
