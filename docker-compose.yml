@@ -1,0 +1,6 @@
+services:
+  meridian-saas:
+    build: .
+    container_name: meridian-saas
+    ports: ["3000:3000"]
+    restart: unless-stopped
