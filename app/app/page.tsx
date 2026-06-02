@@ -1,35 +1,23 @@
 // app/app/page.tsx
-// Mobile PWA shell. Uses the mobile-slide-module design system.
-// All data fetched from /api/products at runtime (or build-time).
+// Meridian mobile PWA — slide-module design.
 
-import { CATALOG } from "@/lib/catalog";
-import { MobileAppShell } from "./MobileAppShell";
+import { CATALOG, formatPrice } from "@/lib/catalog";
+import { MeridianPwa } from "./MeridianPwa";
 
 export const dynamic = "force-static";
 
 export default function PwaPage() {
-  // For the prototype, embed a curated subset of tiers as "moments".
-  const moments = CATALOG
-    .find(p => p.id === "voypath")!
-    .tiers
-    .map(t => ({
-      id: t.id,
-      name: t.name,
-      price: `$${t.price / 100}`,
-      tier: t.id,
-      cat: t.id.split("-")[0],
-    }));
-  const recommended = CATALOG
-    .find(p => p.id === "meridian")!
-    .tiers
-    .map(t => ({
-      id: t.id,
-      name: t.name,
-      loc: "Boulder, Colorado",
-      price: `$${t.price / 100}`,
-      rating: 4.9,
-      reviews: 234,
-    }));
+  const product = CATALOG[0]; // Meridian
 
-  return <MobileAppShell moments={moments} recommended={recommended} />;
+  // Tier → "moment" card. Use the tier id as a stable photo key.
+  const moments = product.tiers.map(t => ({
+    id: t.id,
+    name: t.name,
+    price: formatPrice(t.price, t.interval),
+    tier: t.id,
+    description: t.description,
+    tagline: t.features[0] || t.description,
+  }));
+
+  return <MeridianPwa moments={moments} productName={product.name} tagline={product.tagline} />;
 }

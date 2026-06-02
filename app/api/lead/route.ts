@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.errors[0]?.message || "Invalid input" }, { status: 400 });
   }
   const lead = parsed.data;
-  const product = findProduct(lead.product);
-  const tier = findTier(lead.product, lead.tier);
+  const product = findProduct("meridian");
+  const tier = findTier(lead.tier);
   if (!product || !tier) {
     return NextResponse.json({ error: "Unknown product or tier" }, { status: 404 });
   }

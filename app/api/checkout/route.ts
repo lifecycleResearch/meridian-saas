@@ -24,8 +24,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Valid email required" }, { status: 400 });
   }
 
-  const product = findProduct(productId);
-  const tier = findTier(productId, tierId);
+  const product = findProduct("meridian");
+  const tier = findTier(tierId);
   if (!product || !tier) {
     return NextResponse.json({ error: "Unknown product or tier" }, { status: 404 });
   }
