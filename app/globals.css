@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg: 15 23 41;
+    --color-fg: 26 34 51;
+    --color-muted: 122 133 153;
+  }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { @apply bg-navy-50 text-navy-900 font-sans; }
+  ::selection { @apply bg-brand-500 text-white; }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-navy-900 text-white font-semibold rounded-pill hover:bg-navy-700 active:scale-95 transition;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-navy-900 font-semibold rounded-pill border border-navy-200 hover:border-navy-300 active:scale-95 transition;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-navy-900 font-semibold rounded-pill hover:bg-navy-100 active:scale-95 transition;
+  }
+  .card {
+    @apply bg-white rounded-card shadow-card overflow-hidden;
+  }
+  .container {
+    @apply max-w-6xl mx-auto px-6;
+  }
+  .section {
+    @apply py-20;
+  }
+  .h-display {
+    @apply font-display italic font-medium tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .grid-bg {
+    background-image: linear-gradient(rgba(30,111,184,.06) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(30,111,184,.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}

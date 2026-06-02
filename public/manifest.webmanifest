@@ -1,0 +1,13 @@
+{
+  "name": "Meridian SaaS",
+  "short_name": "Meridian",
+  "description": "Multi-product SaaS portfolio. Meridian, VOYPATH, APEX, Services.",
+  "start_url": "/app",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f1729",
+  "theme_color": "#0f1729",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
