@@ -2,9 +2,11 @@
 "use client";
 import { useState } from "react";
 import { createBrowserSupabase } from "@/lib/supabase-browser";
+import { suggestEmail, isDisposableDomain, extractDomain } from "@/utils/email-verification/mailcheck";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
+  const [emailSuggestion, setEmailSuggestion] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +28,14 @@ export default function LoginForm() {
   async function sendMagicLink(e: React.FormEvent) {
     e.preventDefault();
     if (!sb) { setError("Auth not configured."); return; }
+
+    // LAYER 2: Block disposable email addresses before wasting a send
+    const domain = extractDomain(email);
+    if (domain && isDisposableDomain(domain)) {
+      setError("Disposable email addresses are not allowed. Please use a permanent email.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     const { error } = await sb.auth.signInWithOtp({
@@ -59,8 +69,38 @@ export default function LoginForm() {
       <form onSubmit={sendMagicLink} className="space-y-3">
         <div>
           <label className="eyebrow block mb-1">Email</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required disabled={!sb} className="w-full px-4 py-3 bg-cream-100 border border-ink-800/10 rounded-card focus:border-gold-400 outline-none disabled:opacity-50" />
+          <input
+            value={email}
+            onChange={(e) => {
+              const val = e.target.value;
+              setEmail(val);
+              if (val.includes("@") && val.length > 7) {
+                const suggestion = suggestEmail(val);
+                setEmailSuggestion(suggestion?.full ?? null);
+              } else {
+                setEmailSuggestion(null);
+              }
+            }}
+            onBlur={() => {
+              if (email.includes("@")) {
+                const suggestion = suggestEmail(email);
+                setEmailSuggestion(suggestion?.full ?? null);
+              }
+            }}
+            type="email" required disabled={!sb}
+            className="w-full px-4 py-3 bg-cream-100 border border-ink-800/10 rounded-card focus:border-gold-400 outline-none disabled:opacity-50"
+          />
         </div>
+        {!error && emailSuggestion && emailSuggestion !== email && (
+          <div className="flex items-center gap-2 rounded-card border border-gold-400/40 bg-gold-400/10 px-3 py-2 text-sm">
+            <svg className="h-4 w-4 flex-shrink-0 text-gold-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+            <span className="text-ink-800">Did you mean{" "}
+              <button type="button" onClick={() => { setEmail(emailSuggestion); setEmailSuggestion(null); }} className="font-semibold text-gold-400 underline decoration-gold-400/60 underline-offset-2 hover:text-gold-500">{emailSuggestion}</button>
+            ?</span>
+          </div>
+        )}
         {error ? (
         <div className="space-y-1">
           <p className="text-xs text-red-600">{error}</p>

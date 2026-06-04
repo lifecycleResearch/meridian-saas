@@ -1,11 +1,11 @@
 // app/api/lead/route.ts
-// Capture a lead. Persists to Supabase (if admin key) + emails notify (if Resend).
+// Capture a lead. Persists to Supabase (if admin key) + emails notify (via SES).
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { findTier, PRODUCT } from "@/lib/catalog";
 import { createAdminSupabase } from "@/lib/supabase-server";
-import { resend, leadNotifyEmail } from "@/lib/resend";
+import { sendEmail } from "@/lib/ses";
 import { randomUUID } from "node:crypto";
 
 export const dynamic = "force-dynamic";
@@ -75,12 +75,12 @@ export async function POST(req: NextRequest) {
     console.log("[lead]", JSON.stringify(row));
   }
 
-  if (resend) {
-    resend.emails.send({
-      from: "Meridian Leads <leads@clientretentionservice.com>",
-      to: [leadNotifyEmail],
-      subject: `New Meridian lead: ${lead.name || lead.email || lead.phone || "Unknown"}`,
-      html: `<h2>New Meridian lead</h2>
+  const leadNotifyEmail = process.env.LEAD_NOTIFY_EMAIL || "hello@clientretentionservice.com";
+
+  sendEmail({
+    to: leadNotifyEmail,
+    subject: `New Meridian lead: ${lead.name || lead.email || lead.phone || "Unknown"}`,
+    html: `<h2>New Meridian lead</h2>
         <ul>
           <li><b>Product</b>: ${PRODUCT.name}</li>
           ${tierName ? `<li><b>Tier</b>: ${tierName}</li>` : ""}
@@ -92,8 +92,8 @@ export async function POST(req: NextRequest) {
           <li><b>Source</b>: ${lead.source || "—"}</li>
           <li><b>Time</b>: ${receivedAt}</li>
         </ul>`,
-    }).catch((e) => console.error("[lead] resend failed:", e.message));
-  }
+    from: "Meridian Leads <leads@clientretentionservice.com>",
+  }).catch((e) => console.error("[lead] SES send failed:", (e as Error).message));
 
   return NextResponse.json({ success: true, id, storage });
 }

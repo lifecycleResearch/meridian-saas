@@ -2,7 +2,7 @@
 import { stripeConfigured, stripeRead } from "./stripe";
 import { supabaseAdminConfigured } from "./supabase-server";
 import { supabaseConfigured } from "./supabase-browser";
-import { resendConfigured } from "./resend";
+import { sesConfigured } from "@/utils/email/ses";
 
 export function integrationsReport() {
   return {
@@ -14,6 +14,6 @@ export function integrationsReport() {
       public: supabaseConfigured,
       admin: supabaseAdminConfigured,
     },
-    resend: resendConfigured,
+    ses: sesConfigured(),
   };
 }

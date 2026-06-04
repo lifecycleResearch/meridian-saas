@@ -12,6 +12,7 @@
     "db:push": "supabase db push"
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.1061.0",
     "@stripe/stripe-js": "^4.10.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.1",
